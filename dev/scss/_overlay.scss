@@ -57,6 +57,7 @@
   position: fixed;
   bottom: 0;
   background: rgba(0, 0, 0, .6);
+  box-sizing: border-box;
   color: $color-white;
   padding: 20px 10px;
   width: 100%;

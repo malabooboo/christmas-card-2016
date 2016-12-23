@@ -221,6 +221,7 @@ class Card {
    * @private
    */
   openOverlay_(photoEl) {
+    this.lockScroll_();
     let overlayShown = CLASS_NAME.OVERLAY + STATE.SHOWN;
     let imgSource = photoEl;
     if (!photoEl.classList.contains(CLASS_NAME.PHOTOS)) {
@@ -249,6 +250,7 @@ class Card {
    * @private
    */
   closeOverlay_() {
+    this.unlockScroll_();
     let overlayShown = CLASS_NAME.OVERLAY + STATE.SHOWN;
     if (!this.overlayEl_.classList.contains(overlayShown)) {
       return;
@@ -304,6 +306,28 @@ class Card {
         break;
       }
     }
+  }
+
+  /**
+   * Locks scroll.
+   * @private
+   */
+  lockScroll_() {
+    if (document.body.classList.contains('scroll-locked')) {
+      return;
+    }
+    document.body.classList.add('scroll-locked');
+  }
+
+  /**
+   * Unlocks scroll.
+   * @private
+   */
+  unlockScroll_() {
+    if (!document.body.classList.contains('scroll-locked')) {
+      return;
+    }
+    document.body.classList.remove('scroll-locked');
   }
 
   /**
