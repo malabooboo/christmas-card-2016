@@ -111,7 +111,11 @@ class Card {
     // Adds scroll event listener.
     window.addEventListener(EVENT.SCROLL, e => {
       let startScrollPosition = this.scrollPosition_;
-      this.scrollPosition_ = document.body.scrollTop;
+      // Firefox doesn't support document.body.scrollTop.
+      let scrollPosition = window.pageYOffset ||
+                           document.documentElement.scrollTop ||
+                           document.body.scrollTop || 0;
+      this.scrollPosition_ = scrollPosition;
       this.scrollHandler_(startScrollPosition, this.scrollPosition_);
     });
 
@@ -168,7 +172,7 @@ class Card {
     if (!this.ticking) {
       window.requestAnimationFrame(() => {
         if (this.scrollPosition_ >
-            this.cardSectionHeight_ - (this.cardSectionHeight_ * .67)) {
+            this.cardSectionHeight_ - (this.cardSectionHeight_ / 2)) {
           if (!this.yearSectionEl_.classList.contains(yearInView)) {
             this.yearSectionEl_.classList.add(yearInView);
             this.lazyLoadImages_();
@@ -212,7 +216,7 @@ class Card {
   }
 
   /**
-   * Builds anad shows overlay.
+   * Builds and shows overlay.
    * @param {string} photoUrl
    * @private
    */
