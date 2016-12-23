@@ -42,10 +42,10 @@ class Card {
     this.scrollPosition_ = 0;
 
     /** @private {Element} */
-    this.cardContent_ = document.querySelector(ELEMENT.CARD_CONTENT);
+    this.cardContentEl_ = document.querySelector(ELEMENT.CARD_CONTENT);
 
     /** @private {Element} */
-    this.continueButton_ = document.querySelector(ELEMENT.CONTINUE_BUTTON);
+    this.continueButtonEl_ = document.querySelector(ELEMENT.CONTINUE_BUTTON);
 
     /** @private {Element} */
     this.cardSectionEl_ = document.getElementById(CLASS_NAME.CARD_SECTION);
@@ -105,8 +105,8 @@ class Card {
    */
   createEventListeners_() {
     // Adds scroll to year section from entire card content area.
-    this.cardContent_.addEventListener(
-        EVENT.CLICK, e => { this.continueButton_.click(); }, false, this);
+    this.cardContentEl_.addEventListener(
+        EVENT.CLICK, e => { this.continueButtonEl_.click(); }, false, this);
 
     // Adds scroll event listener.
     window.addEventListener(EVENT.SCROLL, e => {
@@ -186,14 +186,16 @@ class Card {
    */
   lazyLoadImages_() {
     let yearPhotoEls = this.yearSectionEl_.querySelectorAll(ELEMENT.PHOTOS);
-    for (let photo of yearPhotoEls) {
+    // for (let photo of yearPhotoEls) {
+    for (var i = 0, photo; photo = yearPhotoEls[i]; i++) {
       photo.src = photo.dataset.src;
       photo.classList.add(CLASS_NAME.PHOTOS + STATE.SHOWN);
-      // Removes data-src and height attributes after a delay.
-      setTimeout(() => {
-        delete photo.dataset.src;
-        photo.removeAttribute('height');
-      }, 500);
+      // Removes data-src and height attributes after a staggered delay.
+      setTimeout(function() {
+        // Binds "this" to photo.
+        delete this.dataset.src;
+        this.removeAttribute('height');
+      }.bind(photo, i), 200 * i);
     }
   }
 
